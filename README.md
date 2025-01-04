@@ -96,10 +96,17 @@ cmake --build build --config Release
 
 ### Linux 
 
+All subsequent commands should be called from terminal. Compilation was checked using **g++** (version 11.4.0) and **clang++** (version 14.0.0) compilers.
+
 ```
+git clone --recurse-submodules -j8 https://github.com/Tolisz/ComputerGraphics_Tessellation.git
+cd ComputerGraphics_Tessellation
+cmake -S . -B build -DTESSELLATION_EMBEDDED_SHADERS=ON -DTESSELLATION_SHOW_DEBUG_CONSOLE=OFF
+cmake --build build --config Release -j 26
 ```
 
 ```
+./build/tessellation
 ```
 
 ## Used Libraries
