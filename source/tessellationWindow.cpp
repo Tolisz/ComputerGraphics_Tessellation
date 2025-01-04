@@ -9,6 +9,10 @@
 #include <gli/gli.hpp>
 #undef GLM_ENABLE_EXPERIMENTAL
 
+#ifdef EMBEDDED_SHADERS
+	#include "shaders/all_shaders.hpp"
+#endif
+
 #include <iostream>
 
 std::string tessellationWindow::m_shaderBasePath = "shaders/";
@@ -33,10 +37,17 @@ void tessellationWindow::RunInit()
     m_obj_quad.InitGL();
     
     m_sh_quad.Init();
+#ifndef EMBEDDED_SHADERS
     m_sh_quad.AttachShader(shPath("quad.vert"), GL_VERTEX_SHADER);
     m_sh_quad.AttachShader(shPath("quad.tesc"), GL_TESS_CONTROL_SHADER);
     m_sh_quad.AttachShader(shPath("quad.tese"), GL_TESS_EVALUATION_SHADER);
     m_sh_quad.AttachShader(shPath("quad.frag"), GL_FRAGMENT_SHADER);
+#else 
+    m_sh_quad.AttachShader(shader_quad_vert, GL_VERTEX_SHADER, true);
+    m_sh_quad.AttachShader(shader_quad_tesc, GL_TESS_CONTROL_SHADER, true);
+    m_sh_quad.AttachShader(shader_quad_tese, GL_TESS_EVALUATION_SHADER, true);
+    m_sh_quad.AttachShader(shader_quad_frag, GL_FRAGMENT_SHADER, true);    
+#endif 
     m_sh_quad.Link();
 
     /* Set Light parameters */
@@ -58,8 +69,13 @@ void tessellationWindow::RunInit()
     m_obj_controlPoints.InitGL();
 
     m_sh_controlPoints.Init();
+#ifndef EMBEDDED_SHADERS
     m_sh_controlPoints.AttachShader(shPath("controlPoints.vert"), GL_VERTEX_SHADER);
     m_sh_controlPoints.AttachShader(shPath("controlPoints.frag"), GL_FRAGMENT_SHADER);
+#else
+    m_sh_controlPoints.AttachShader(shader_controlPoints_vert, GL_VERTEX_SHADER, true);
+    m_sh_controlPoints.AttachShader(shader_controlPoints_frag, GL_FRAGMENT_SHADER, true);    
+#endif
     m_sh_controlPoints.Link();
 
     InitKeyboardMenager();
